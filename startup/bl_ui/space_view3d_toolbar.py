@@ -70,6 +70,42 @@ def draw_gpencil_tools(context, layout):
 
 # ********** default tools for object-mode ****************
 
+class VIEW3D_PT_tools_object_add(View3DPanel, Panel):
+    bl_context = "objectmode"
+    bl_label = "Add"
+
+    def draw(self, context):
+        layout = self.layout
+        
+        col = layout.column(align=True)
+        col.label(text="Mesh:")
+        row = col.row(align=True)
+        row.operator("mesh.primitive_plane_add", text="", icon="MESH_PLANE")
+        row.separator()
+        row.operator("mesh.primitive_circle_add", text="", icon="MESH_CIRCLE")
+        col.separator()
+        row = col.row(align=True)
+        row.operator("mesh.primitive_cube_add", text="", icon="MESH_CUBE")
+        row.separator()
+        row.operator("mesh.primitive_uv_sphere_add", text="", icon="MESH_UVSPHERE")
+        row.separator()
+        row.operator("mesh.primitive_cylinder_add", text="", icon="MESH_CYLINDER")
+        row.separator()
+        row.operator("mesh.primitive_cone_add", text="", icon="MESH_CONE")
+        
+        col.label(text="Curve:")
+        row = col.row(align=True)
+        row.operator("curve.primitive_bezier_curve_add", text="", icon="CURVE_BEZCURVE")
+        row.separator()
+        row.operator("curve.primitive_bezier_circle_add", text="", icon="CURVE_BEZCIRCLE")
+        row.separator()
+        row.operator("curve.primitive_nurbs_curve_add", text="", icon="CURVE_NCURVE")
+        row.separator()
+        row.operator("curve.primitive_nurbs_circle_add", text="", icon="CURVE_NCIRCLE")
+        row.separator()
+        row.operator("curve.primitive_nurbs_path_add", text="", icon="CURVE_PATH")
+
+
 class VIEW3D_PT_tools_objectmode(View3DPanel, Panel):
     bl_context = "objectmode"
     bl_label = "Object Tools"
@@ -143,6 +179,42 @@ class VIEW3D_PT_tools_rigidbody(View3DPanel, Panel):
 # ********** default tools for editmode_mesh ****************
 
 
+class VIEW3D_PT_tools_mesh_add(View3DPanel, Panel):
+    bl_context = "mesh_edit"
+    bl_label = "Add"
+
+    def draw(self, context):
+        layout = self.layout
+        
+        col = layout.column(align=True)
+        col.label(text="Mesh:")
+        row = col.row(align=True)
+        row.operator("mesh.primitive_plane_add", text="", icon="MESH_PLANE")
+        row.separator()
+        row.operator("mesh.primitive_circle_add", text="", icon="MESH_CIRCLE")
+        col.separator()
+        row = col.row(align=True)
+        row.operator("mesh.primitive_cube_add", text="", icon="MESH_CUBE")
+        row.separator()
+        row.operator("mesh.primitive_uv_sphere_add", text="", icon="MESH_UVSPHERE")
+        row.separator()
+        row.operator("mesh.primitive_cylinder_add", text="", icon="MESH_CYLINDER")
+        row.separator()
+        row.operator("mesh.primitive_cone_add", text="", icon="MESH_CONE")
+        
+        col.label(text="Curve:")
+        row = col.row(align=True)
+        row.operator("curve.primitive_bezier_curve_add", text="", icon="CURVE_BEZCURVE")
+        row.separator()
+        row.operator("curve.primitive_bezier_circle_add", text="", icon="CURVE_BEZCIRCLE")
+        row.separator()
+        row.operator("curve.primitive_nurbs_curve_add", text="", icon="CURVE_NCURVE")
+        row.separator()
+        row.operator("curve.primitive_nurbs_circle_add", text="", icon="CURVE_NCIRCLE")
+        row.separator()
+        row.operator("curve.primitive_nurbs_path_add", text="", icon="CURVE_PATH")
+
+
 class VIEW3D_PT_tools_meshedit(View3DPanel, Panel):
     bl_context = "mesh_edit"
     bl_label = "Mesh Tools"
@@ -152,65 +224,46 @@ class VIEW3D_PT_tools_meshedit(View3DPanel, Panel):
 
         col = layout.column(align=True)
         col.label(text="Transform:")
-        col.operator("transform.translate")
-        col.operator("transform.rotate")
-        col.operator("transform.resize", text="Scale")
-        col.operator("transform.shrink_fatten", text="Shrink/Fatten")
-        col.operator("transform.push_pull", text="Push/Pull")
+        row = col.row(align=True)
+        row.operator("transform.translate", text="", icon="MAN_TRANS")
+        row.separator()
+        row.operator("transform.rotate", text="", icon="MAN_ROT")
+        row.separator()
+        row.operator("transform.resize", text="", icon="MAN_SCALE")
+        col.separator()
 
         col = layout.column(align=True)
-        col.label(text="Deform:")
+        col.label(text="Select:")
         row = col.row(align=True)
-        row.operator("transform.edge_slide", text="Slide Edge")
-        row.operator("transform.vert_slide", text="Vertex")
-        col.operator("mesh.noise")
-        col.operator("mesh.vertices_smooth")
+        props_sb = row.operator("view3d.select_border")
+        props_sb.extend = False
+        row.operator("view3d.select_circle")
+        row = col.row(align=True)
+        props_lms = row.operator("mesh.loop_multi_select", text="Ring")
+        props_lms.ring = True
+        row.operator("mesh.loop_multi_select", text="Loop")
+        row = col.row(align=True)
+        props_ms = row.operator("mesh.select_mirror")
+        props_ms.extend = True
+        row.operator("mesh.select_all")
 
         col = layout.column(align=True)
         col.label(text="Add:")
-
-        col.menu("VIEW3D_MT_edit_mesh_extrude")
-        col.operator("view3d.edit_mesh_extrude_move_normal", text="Extrude Region")
-        col.operator("view3d.edit_mesh_extrude_individual_move", text="Extrude Individual")
-        col.operator("mesh.subdivide")
-        col.operator("mesh.loopcut_slide")
-        col.operator("mesh.duplicate_move", text="Duplicate")
-        col.operator("mesh.spin")
-        col.operator("mesh.screw")
-
         row = col.row(align=True)
-        props = row.operator("mesh.knife_tool", text="Knife")
-        props.use_occlude_geometry = True
-        props.only_selected = False
-        props = row.operator("mesh.knife_tool", text="Select")
-        props.use_occlude_geometry = False
-        props.only_selected = True
-        col.operator("mesh.knife_project")
+        row.operator("mesh.edge_face_add")
+        row.operator("mesh.fill")
+        row = col.row(align=True)
+        row.operator("view3d.edit_mesh_extrude_move_normal", text="Extrude")
+        row.operator("mesh.duplicate_move", text="Duplicate")
+        row = col.row(align=True)
+        row.operator("mesh.knife_tool", text="Knife")
+        row.operator("mesh.loopcut_slide", text="Loopcut")
 
         col = layout.column(align=True)
         col.label(text="Remove:")
         col.menu("VIEW3D_MT_edit_mesh_delete")
         col.operator_menu_enum("mesh.merge", "type")
         col.operator("mesh.remove_doubles")
-
-        col = layout.column(align=True)
-        col.label(text="Normals:")
-        col.operator("mesh.normals_make_consistent", text="Recalculate")
-        col.operator("mesh.flip_normals", text="Flip Direction")
-
-        col = layout.column(align=True)
-        col.label(text="UV Mapping:")
-        col.menu("VIEW3D_MT_uv_map", text="Unwrap")
-        col.operator("mesh.mark_seam").clear = False
-        col.operator("mesh.mark_seam", text="Clear Seam").clear = True
-
-        col = layout.column(align=True)
-        col.label(text="Shading:")
-        row = col.row(align=True)
-        row.operator("mesh.faces_shade_smooth", text="Smooth")
-        row.operator("mesh.faces_shade_flat", text="Flat")
-
-        draw_repeat_tools(context, layout)
 
         draw_gpencil_tools(context, layout)
 
